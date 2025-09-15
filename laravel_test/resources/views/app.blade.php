@@ -10,6 +10,9 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
         crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
 </head>
 
 <body>

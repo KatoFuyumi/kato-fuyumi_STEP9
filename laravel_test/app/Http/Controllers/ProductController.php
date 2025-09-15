@@ -123,4 +123,13 @@ class ProductController extends Controller
         $products = $query->get();
         return view('index',compact('products'));
     }
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->route('index')
+            ->with('success','商品が削除されました');
+    }
 }

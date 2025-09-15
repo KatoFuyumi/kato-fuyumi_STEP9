@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,3 +26,13 @@ Route::put('/product/{id}', [ProductController::class, 'update'])->name('update'
 
 //検索
 Route::get('/search',[ProductController::class,'search'])->name('search');
+
+//商品削除
+Route::delete('/product/{id}',[ProductController::class, 'destroy'])->name('destroy');
+
+//ログイン
+Auth::routes();
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

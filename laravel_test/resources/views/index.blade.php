@@ -50,6 +50,12 @@
                 <td>{{ $product->price }}</td>
                 <td>
                     <a href="{{ route('detail',$product->id) }}" class="btn btn-success">詳細</a>
+
+                    <form action="{{ route('destroy',$product->id) }}" method="POST" style="display: inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</button>
+                    </form>
                 </td>
             </tr>
             @empty
