@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品一覧</title>
-</head>
-<body>
+@extends('app')
+
+@section('title','商品一覧')
+
+@section('content')
+<div class="container">
     <h1>商品一覧</h1>
+
+    <a href="{{ route('create') }}" class="btn btn-success mb-3">商品新規登録</a>
 
     <table border="1">
         <thead>
@@ -29,10 +29,13 @@
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" width="120">
                     @endif</td>
                 <td>{{ $product->price }}</td>
+                <td>
+                    <a href="{{ route('detail',$product->id) }}" class="btn btn-primary">詳細</a>
+                </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-    
-</body>
-</html>
+
+</div>
+@endsection

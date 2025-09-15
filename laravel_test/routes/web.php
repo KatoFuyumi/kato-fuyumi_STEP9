@@ -18,3 +18,7 @@ Route::post('/store',[ProductController::class,'store'])->name('store');
 
 //商品詳細
 Route::get('/product/{id}',[ProductController::class,'show'])->name('detail');
+
+// 商品編集画面
+Route::get('/product/{id}/edit', [ProductController::class,'edit'])->name('edit');
+Route::put('/product/{id}', [ProductController::class, 'update'])->name('update');

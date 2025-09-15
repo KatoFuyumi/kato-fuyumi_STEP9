@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -50,5 +51,43 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         return view('detail',compact('product'));
+    }
+
+    //商品編集画面
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('edit',compact('product'));
+    }
+
+    //編集処理
+    public function update(Request $request,$id)
+    {
+        $request->validate([
+            'name' => 'required|max:255',
+            'content' => 'required', 
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'price' => 'required', 
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->name = $request->input('name');
+        $product->content = $request->input('content');
+        $product->price = $request->input('price');
+
+    //画像をアップロード
+    if($request->hasFile('image')) {
+        if($product->image) {
+            Storage::delete('public/' . $product->image);
+        }
+
+        $imagePath = $request->file('image')->store('image','public');
+        $product->image = $imagePath;
+    }
+
+    $product->save();
+
+    return redirect()->route('detail',$id)
+        ->with('success','商品が更新されました');
     }
 }

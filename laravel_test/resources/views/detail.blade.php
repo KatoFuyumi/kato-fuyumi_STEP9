@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品詳細</title>
-</head>
+@extends('app')
 
-<body>
+@section('title','商品一覧')
+
+@section('content')
+<div class="container">
     <h1>商品詳細</h1>
 
     <div class="container">
@@ -17,5 +14,9 @@
         @endif
         <p>¥{{ $product->price }}</p>
     </div>
-</body>
-</html>
+
+    <a href="{{ route('edit',$product->id) }}" class="btn btn-primary">更新する</a>
+    <a href="{{ route('index') }}" class="btn btn-secondary">一覧に戻る</a>
+
+</div>
+@endsection
