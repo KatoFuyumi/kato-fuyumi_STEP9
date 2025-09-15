@@ -15,3 +15,6 @@ Route::get('/index',[ProductController::class,'index'])->name('index');
 Route::get('/create',[ProductController::class,'create'])->name('create');
 
 Route::post('/store',[ProductController::class,'store'])->name('store');
+
+//商品詳細
+Route::get('/product/{id}',[ProductController::class,'show'])->name('detail');

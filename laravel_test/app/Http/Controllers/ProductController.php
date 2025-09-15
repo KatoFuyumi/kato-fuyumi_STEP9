@@ -44,4 +44,11 @@ class ProductController extends Controller
 
         return redirect()->route('index')->with('success','商品が登録されました');
     }
+
+    //商品詳細画面
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('detail',compact('product'));
+    }
 }
