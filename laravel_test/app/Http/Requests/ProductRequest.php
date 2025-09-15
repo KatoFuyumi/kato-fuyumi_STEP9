@@ -17,8 +17,8 @@ class ProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'content' => 'required', 
+            'product_name' => 'required|max:255',
+            'description' => 'required', 
             'price' => 'required', 
         ];
     }
@@ -26,10 +26,11 @@ class ProductRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => '商品名は必須です',
-            'name.max' => '商品名は255文字以内で入力してください',
-            'content.required' => '商品説明は必須です', 
+            'product_name.required' => '商品名は必須です',
+            'product_name.max' => '商品名は255文字以内で入力してください',
+            'description.required' => '商品説明は必須です', 
             'price.required' => '料金は必須です', 
+            'stock.required' => '在庫は必須です', 
         ];
     }
 }

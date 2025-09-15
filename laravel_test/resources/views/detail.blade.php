@@ -1,16 +1,16 @@
 @extends('app')
 
-@section('title','商品一覧')
+@section('title','商品詳細')
 
 @section('content')
 <div class="container">
     <h1>商品詳細</h1>
 
     <div class="container">
-        <h2>{{ $product->name }}</h2>
-        <p>{{ $product->content}}</p>
-        @if($product->image)
-        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid">
+        <h2>{{ $product->product_name }}</h2>
+        <p>{{ $product->description}}</p>
+        @if($product->img_path)
+        <img src="{{ asset('storage/' . $product->img_path) }}" alt="{{ $product->product_name }}" class="img-fluid">
         @endif
         <p>¥{{ $product->price }}</p>
     </div>

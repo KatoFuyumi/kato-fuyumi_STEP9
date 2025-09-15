@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('content');
-            $table->string('image')->nullable();
+            $table->bigInteger('user_id');
+            $table->bigInteger('company_id');
+            $table->bigInteger('product_id');
+            $table->string('product_name');
             $table->integer('price');
+            $table->integer('stock');
+            $table->string('description');
+            $table->string('img_path')->nullable();
             $table->timestamps(); 
         });
     }
@@ -29,3 +33,4 @@ return new class extends Migration
         Schema::dropIfExists('products');
     }
 };
+

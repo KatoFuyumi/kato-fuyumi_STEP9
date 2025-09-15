@@ -11,7 +11,7 @@
     <form action="{{ route('search') }}" method="GET" class="my-3">
         <div class="row align-items-center">
         <div class="col-4">
-            <input type="text" name="name" class="form-control" placeholder="商品名を入力" value="{{ request('name') }}">
+            <input type="text" name="product_name" class="form-control" placeholder="商品名を入力" value="{{ request('product_name') }}">
         </div>
 
         <div class="col-4 d-flex">
@@ -34,17 +34,18 @@
                 <th>商品説明</th>
                 <th>画像</th>
                 <th>料金(¥)</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @forelse($products as $product)
             <tr>
                 <td>{{ $product->id }}</td>
-                <td>{{ $product->name }}</td>
-                <td>{{ $product->content }}</td>
+                <td>{{ $product->product_name }}</td>
+                <td>{{ $product->description }}</td>
                 <td>
-                    @if ($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" width="120">
+                    @if ($product->img_path)
+                        <img src="{{ asset('storage/' . $product->img_path) }}" alt="{{ $product->product_name }}" width="120">
                     @endif</td>
                 <td>{{ $product->price }}</td>
                 <td>
