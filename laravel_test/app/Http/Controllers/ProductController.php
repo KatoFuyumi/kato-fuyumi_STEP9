@@ -90,4 +90,29 @@ class ProductController extends Controller
     return redirect()->route('detail',$id)
         ->with('success','商品が更新されました');
     }
+
+    public function search(Request $request)
+    {
+        $query = Product::query();
+        $nameSearch = $request->input('name');
+        $priceSearch = $request->input('price');
+
+        if($request->filled('name')) {
+            $query->where('name','like','%' . $nameSearch . '%');
+        }
+
+        $priceMin = $request->input('price_min');
+        $priceMax = $request->input('price_max');
+
+        if ($priceMin !== null) {
+            $query->where('price', '>=', $priceMin);
+        }
+
+        if ($priceMax !== null) {
+            $query->where('price', '<=', $priceMax);
+        }
+
+        $products = $query->get();
+        return view('index',compact('products'));
+    }
 }
