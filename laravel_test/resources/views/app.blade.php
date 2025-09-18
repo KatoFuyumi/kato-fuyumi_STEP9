@@ -9,15 +9,34 @@
         rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
         crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-
+        
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
 <body>
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 bg-primary-subtle">
-        <h3>Cytech EC</h3>
+        <a href="{{ route('index') }}" class="text-decoration-none link-body-emphasis ms-3">
+            <h3>Cytech EC</h3>
+        </a>
+        
+        <div class="d-flex align-items-center ms-auto gap-3 me-4">
+        
+            <a href="{{ route('index') }}" class="text-decoration-none">Home</a>
+            <a href="{{ route('index') }}" class="text-decoration-none">マイページ</a>
+
+            <div>ログインユーザー: {{ auth()->user()->name }}</div>
+
+            <div>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+                </form>
+                <a class="btn btn-danger" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    ログアウト
+                </a>
+            </div>
+        </div>
     </header>
 
     <div class="container">
@@ -35,5 +54,8 @@
     <footer class="d-flex flex-wrap justify-content-center py-3 mt-5 bg-primary-subtle">
         <p>&copy; 2025 All Rights Reserved.</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
