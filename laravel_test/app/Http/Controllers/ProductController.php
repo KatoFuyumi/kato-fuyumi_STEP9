@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -15,6 +16,22 @@ class ProductController extends Controller
         $products = Product::all();
 
         return view('index',compact('products'));
+    }
+
+    //コンストラクタ
+    public function __construct(
+        private Product $product = new Product,
+    ) {}
+
+    //マイページ
+    public function mypage()
+    {
+        //ログインユーザーID取得
+        $user_id = Auth::id();
+        //自身の商品取得
+        $products = $this->product->getOwnProduct($user_id);
+        //ビューにデータを渡す
+        return view('mypage',compact('products'));
     }
 
     //商品新規登録
@@ -35,16 +52,14 @@ class ProductController extends Controller
             'stock' => 'required', 
         ]);
 
-        $validatedData['user_id'] = auth()->id() ?? 1; // ログインユーザーID
-        $validatedData['company_id'] = 1; // 仮の値
-        $validatedData['product_id'] = 1; // 仮の値
-
         //画像ファイル処理
         if ($request->hasFile('img_path')){
             $imagePath = $request->file('img_path')->store('images','public');
 
             $validatedData['img_path'] = $imagePath;
         }
+
+        $validatedData['user_id'] = auth()->id();
 
         //データの保存
         Product::create($validatedData);

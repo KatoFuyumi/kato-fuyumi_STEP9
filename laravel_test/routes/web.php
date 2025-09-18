@@ -34,3 +34,6 @@ Route::delete('/product/{id}',[ProductController::class, 'destroy'])->name('dest
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//マイページ
+Route::get('/mypage',[ProductController::class,'mypage'])->name('mypage');
