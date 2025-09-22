@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('title','商品詳細')
+@section('title','出品商品詳細')
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -9,7 +9,7 @@
 
 <div class="container">
     <div class="pb-3">
-        <h1>商品詳細</h1>
+        <h1>出品商品詳細</h1>
     </div>
 
     <div class="container">
@@ -24,20 +24,17 @@
         </div>
         
         <p>金額：¥{{ $product->price }}</p>
-        <p>会社：{{ $product->company_name }}</p>
     </div>
 
-    <div class="mb-3">
-        <button id="like-btn" class="border-0 bg-transparent"
-            data-product-id="{{ $product->id }}"
-            @if($product->likedBy(Auth::user())) style="color: red;" @endif>
-            <i class="fas fa-heart"></i>
-        </button>
-        <span id="like-count">{{ $product->likes()->count() }}</span>
-    </div>
+    <a href="{{ route('edit',$product->id) }}" class="btn btn-primary">編集</a>
 
-    <a href=# class="btn btn-primary">カートに追加する</a>
-    <a href="{{ route('index') }}" class="btn btn-secondary">戻る</a>
+    <form action="{{ route('destroy',$product->id) }}" method="POST" style="display: inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</button>
+    </form>
+    <a href="{{ route('mypage') }}" class="btn btn-secondary">戻る</a>
+    
 
 </div>
 @endsection

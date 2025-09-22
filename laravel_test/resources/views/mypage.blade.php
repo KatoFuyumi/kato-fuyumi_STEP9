@@ -7,8 +7,7 @@
     <h1>商品一覧</h1>
 
     <div class="d-flex mb-3">
-        <a href="{{ route('create') }}" class="btn btn-success mb-3">商品新規登録</a>
-        <a href="{{ route('index') }}" class="ms-auto">他の人の商品</a>
+        <a href="{{ route('create') }}" class="btn btn-primary mb-3">新規登録</a>
     </div>
 
     <form action="{{ route('search') }}" method="GET" class="my-3">
@@ -52,7 +51,7 @@
                     @endif</td>
                 <td>{{ $product->price }}</td>
                 <td>
-                    <a href="{{ route('detail',$product->id) }}" class="btn btn-success">詳細</a>
+                    <a href="{{ route('mypage.detail',$product->id) }}" class="btn btn-success">詳細</a>
 
                     <form action="{{ route('destroy',$product->id) }}" method="POST" style="display: inline-block;">
                         @csrf

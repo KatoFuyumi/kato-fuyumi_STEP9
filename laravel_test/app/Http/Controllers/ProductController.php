@@ -60,11 +60,12 @@ class ProductController extends Controller
         }
 
         $validatedData['user_id'] = auth()->id();
+        $validatedData['company_id'] = 1; 
 
         //データの保存
-        Product::create($validatedData);
+        $product = Product::create($validatedData);
 
-        return redirect()->route('index')->with('success','商品が登録されました');
+        return redirect()->route('detail', $product->id)->with('success','商品が登録されました');
     }
 
     //商品詳細画面
@@ -110,7 +111,7 @@ class ProductController extends Controller
 
     $product->save();
 
-    return redirect()->route('detail',$id)
+    return redirect()->route('mypage.detail',$product->id)
         ->with('success','商品が更新されました');
     }
 
@@ -146,5 +147,12 @@ class ProductController extends Controller
 
         return redirect()->route('index')
             ->with('success','商品が削除されました');
+    }
+
+    //出品商品詳細
+    public function showOwn($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('mypage.detail_own',compact('product'));
     }
 }

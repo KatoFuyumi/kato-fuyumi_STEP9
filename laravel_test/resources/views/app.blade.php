@@ -15,17 +15,17 @@
 </head>
 
 <body>
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 bg-primary-subtle">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom border-primary">
         <a href="{{ route('index') }}" class="text-decoration-none link-body-emphasis ms-3">
             <h3>Cytech EC</h3>
         </a>
         
-        <div class="d-flex align-items-center ms-auto gap-3 me-4">
+        <div class="d-flex align-items-center ms-auto gap-4 me-4">
         
             <a href="{{ route('index') }}" class="text-decoration-none">Home</a>
-            <a href="{{ route('index') }}" class="text-decoration-none">マイページ</a>
+            <a href="{{ route('mypage') }}" class="text-decoration-none">マイページ</a>
 
-            <div>ログインユーザー: {{ auth()->user()->name }}</div>
+            <div>ログインユーザー: {{ auth()->user()->name ?? '未ログイン'}}</div>
 
             <div>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -51,11 +51,22 @@
         </div>
     </div>
 
-    <footer class="d-flex flex-wrap justify-content-center py-3 mt-5 bg-primary-subtle">
-        <p>&copy; 2025 All Rights Reserved.</p>
+    <footer class="py-3 mt-5 bg-primary-subtle">
+
+        <div class="d-flex flex-wrap justify-content-center pb-3">
+            <a href="{{ route('contact.form') }}" class="btn btn-primary">お問い合わせ</a>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center gap-4 border-bottom border-light pb-3">
+            <a href="{{ route('index') }}" class="text-decoration-none">Home</a>
+            <a href="{{ route('mypage') }}" class="text-decoration-none">マイページ</a>
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-center pt-3">
+            <p>&copy; 2025 Company, inc</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

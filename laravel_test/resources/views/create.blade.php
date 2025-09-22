@@ -19,11 +19,6 @@
         </div>
 
         <div class="form-group">
-            <label for="img_path">画像:</label>
-            <input type="file" id="img_path" name="img_path" id="img_path" class="form-control">
-        </div>
-
-        <div class="form-group">
             <label for="price">料金(¥):</label>
             <input type="text" id="price" name="price" id="price" class="form-control">
         </div>
@@ -33,6 +28,12 @@
             <input type="number" id="stock" name="stock" id="stock" class="form-control" value="{{ old('stock', 0) }}">
         </div>
 
+        <div class="form-group">
+            <label for="img_path">画像:</label>
+            <input type="file" id="img_path" name="img_path" id="img_path"  class="pb-3">
+        </div>
+
+        <a href="{{ route('index') }}" class="btn btn-secondary">戻る</a>
         <button type="submit" class="btn btn-primary">登録</button>
 
     </form>

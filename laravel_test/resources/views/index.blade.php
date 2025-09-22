@@ -5,9 +5,7 @@
 @section('content')
 <div class="container">
     <h1>商品一覧</h1>
-
-    <a href="{{ route('create') }}" class="btn btn-success mb-3">商品新規登録</a>
-
+    
     <form action="{{ route('search') }}" method="GET" class="my-3">
         <div class="row align-items-center">
         <div class="col-4">
@@ -30,7 +28,6 @@
         <thead>
             <tr>
                 <th>商品番号</th>
-                <th>出品者</th>
                 <th>商品名</th>
                 <th>商品説明</th>
                 <th>画像</th>
@@ -42,7 +39,6 @@
             @forelse($products as $product)
             <tr>
                 <td>{{ $product->id }}</td>
-                <td>{{ $product->user->name }}</td>
                 <td>{{ $product->product_name }}</td>
                 <td>{{ $product->description }}</td>
                 <td>
@@ -51,12 +47,7 @@
                     @endif</td>
                 <td>{{ $product->price }}</td>
                 <td>
-                    <a href="{{ route('detail',$product->id) }}" class="btn btn-success">詳細</a>
-
-                    <form action="{{ route('destroy',$product->id) }}" method="POST" style="display: inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</button>
+                    <a href="{{ route('detail', $product->id) }}" class="btn btn-success">詳細</a>
                     </form>
                 </td>
             </tr>
