@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Ui\Presets\React;
 
 class ProductController extends Controller
 {
@@ -31,7 +32,9 @@ class ProductController extends Controller
         //自身の商品取得
         $products = $this->product->getOwnProduct($user_id);
         //ビューにデータを渡す
-        return view('mypage',compact('products'));
+        $user = Auth::user();
+        
+        return view('mypage',compact('products','user'));
     }
 
     //商品新規登録
@@ -154,5 +157,27 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         return view('mypage.detail_own',compact('product'));
+    }
+
+    //商品購入画面
+    public function showPurchaseForm($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('purchase',compact('product'));
+    }
+
+    //購入処理
+    public function parchase(Request $request,$id)
+    {
+        $product = Product::findOrFail($id);
+        $request->validate([
+            'quantity' => 'required|integer|min:1|max:'. $product->stock,
+        ]);
+
+        $product->stock -=$request->quantity;
+        $product->save();
+
+        return redirect()->route('mypage')
+            ->with('success', '商品を購入しました');
     }
 }

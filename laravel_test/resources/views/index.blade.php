@@ -24,7 +24,7 @@
         </div>
     </form>
 
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>商品番号</th>

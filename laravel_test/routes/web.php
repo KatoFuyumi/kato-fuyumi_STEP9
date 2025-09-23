@@ -7,6 +7,7 @@ use App\Models\Like;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\AccountController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,9 +49,21 @@ Route::post('/products/{product}/like',[LikeController::class, 'likeProduct'])->
 Route::delete('/products/{product}/like',[LikeController::class, 'unlikeProduct'])->middleware('auth');
 
 //お問い合わせフォーム
-Route::get('/contact',[ContactController::class,'showForm'])->name('contact.form');
+Route::get('/contact',[ContactController::class, 'showForm'])->name('contact.form');
 
-Route::post('/contact',[ContactController::class,'submitForm'])->name('contact.submit');
+Route::post('/contact',[ContactController::class, 'submitForm'])->name('contact.submit');
 
 //出品商品詳細
-Route::get('/mypage/products/{id}',[ProductController::class,'showOwn'])->name('mypage.detail');
+Route::get('/mypage/products/{id}',[ProductController::class, 'showOwn'])->name('mypage.detail');
+
+
+Route::middleware('auth')->group(function(){
+    //アカウント情報編集
+    Route::get('/account/edit_account',[AccountController::class, 'edit_account'])->name('account.edit');
+    Route::post('/account/update',[AccountController::class, 'update'])->name('account.update');
+
+    //商品購入
+    Route::get('/products/{id}/purchase',[ProductController::class, 'showPurchaseForm'])->name('prodycts.purchase');
+    Route::post('/products/{id}/purchase',[ProductController::class, 'purchase'])->name('purchase');
+});
+

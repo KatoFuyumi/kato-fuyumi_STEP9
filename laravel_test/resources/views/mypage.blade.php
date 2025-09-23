@@ -1,34 +1,35 @@
 @extends('app')
 
-@section('title','商品一覧')
+@section('title','マイページ')
 
 @section('content')
 <div class="container">
-    <h1>商品一覧</h1>
+    <h1>マイページ</h1>
+
+    <div class="d-flex mb-3">
+        <a href="{{ route('account.edit') }}" class="btn btn-primary mb-3">アカウント編集</a>
+    </div>
+
+   <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <td>ユーザー名:{{ $user->name }}</td>
+                <td>名前:{{ $user->name_kanji }}</td>
+            </tr>
+            <tr>
+                <td>Eメール:{{ $user->email }}</td>
+                <td>カナ:{{ $user->name_kana }}</td>
+            </tr>       
+        </tbody> 
+   </table>
+
+    <h5>＜出品商品＞</h5>
 
     <div class="d-flex mb-3">
         <a href="{{ route('create') }}" class="btn btn-primary mb-3">新規登録</a>
     </div>
-
-    <form action="{{ route('search') }}" method="GET" class="my-3">
-        <div class="row align-items-center">
-        <div class="col-4">
-            <input type="text" name="product_name" class="form-control" placeholder="商品名を入力" value="{{ request('product_name') }}">
-        </div>
-
-        <div class="col-4 d-flex">
-            <input type="text" name="price_min" class="form-control" placeholder="最低価格" value="{{ request('price_min') }}">
-            <span>~</span>
-            <input type="text" name="price_max" class="form-control" placeholder="最高価格" value="{{ request('price_max') }}">
-        </div>
-
-        <div class="col-2">
-            <button type="submit" class="btn btn-primary">検索</button>
-        </div>
-        </div>
-    </form>
-
-    <table>
+    
+    <table class=table>
         <thead>
             <tr>
                 <th>商品番号</th>
@@ -67,6 +68,8 @@
             @endforelse
         </tbody>
     </table>
+
+    <h5>＜購入した商品＞</h5>
 
 </div>
 @endsection
