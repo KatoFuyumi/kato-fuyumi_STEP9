@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -39,6 +40,8 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::post('/register', [RegisterController::class, 'register'])->name('register');
+
 //マイページ
 Route::get('/mypage',[ProductController::class, 'mypage'])->name('mypage');
 
@@ -63,7 +66,11 @@ Route::middleware('auth')->group(function(){
     Route::post('/account/update',[AccountController::class, 'update'])->name('account.update');
 
     //商品購入
-    Route::get('/products/{id}/purchase',[ProductController::class, 'showPurchaseForm'])->name('prodycts.purchase');
-    Route::post('/products/{id}/purchase',[ProductController::class, 'purchase'])->name('purchase');
+    Route::get('/purchase/{product_id}',[ProductController::class, 'showPurchaseForm'])->name('products.purchase');
+    Route::post('/purchase',[ProductController::class, 'purchaseWeb'])->name('purchase');
 });
+
+//会社情報
+Route::get('/company/{id}', [ProductController::class, 'showCompany'])->name('company.show');
+
 

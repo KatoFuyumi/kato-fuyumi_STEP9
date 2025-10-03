@@ -44,4 +44,9 @@ class Product extends Model
     {
         return $this->likes()->where('user_id',$user->id)->exists();
     }
+
+    public function company()
+    {
+    return $this->belongsTo(Company::class);
+    }
 }

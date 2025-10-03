@@ -35,8 +35,7 @@ class AccountController extends Controller
             'name_kana' => $request->name_kana,
         ]);
 
-        return redirect()
-            ->route('account.edit')
+        return redirect()->route('mypage')
             ->with('success','アカウント情報を更新しました');
     }
 }

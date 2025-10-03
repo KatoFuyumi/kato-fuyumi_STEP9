@@ -1,25 +1,37 @@
-document.addEventListener('DOMContentLoaded',function() {
+document.addEventListener('DOMContentLoaded', function() {
     const likeBtn = document.getElementById('like-btn');
+    if (!likeBtn) return;
 
-    if(likeBtn) {
-        likeBtn.addEventListener('click',function() {
-            const productId = this.getAttribute('data-product-id');
-            const url = `/products/${productId}/like`;
-            const method = this.querySelector('i').style.color === 'red' ? 'DELETE':'POST';
+    likeBtn.addEventListener('click', function() {
+        const productId = this.dataset.productId;
+        const heartIcon = this.querySelector('i'); // ハートの要素
 
-            fetch(url,{
-                method: method,
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('like-count').textContent = data.likes_count;
-                    const heartIcon = this.querySelector('i');
-                    heartIcon.style.color = method === 'POST' ? 'red' : 'black';
-                });
-        });
-    }
+        // 現在の状態をクラスで判定
+        const liked = heartIcon.classList.contains('fa-solid');
+        const url = liked 
+            ? `/products/${productId}/unlike` 
+            : `/products/${productId}/like`;
+
+        fetch(url, {
+            method: 'POST', 
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(() => {
+            if (liked) {
+                // いいね解除
+                heartIcon.classList.remove('fa-solid');
+                heartIcon.classList.add('fa-regular');
+                heartIcon.style.color = 'black';
+            } else {
+                // いいね
+                heartIcon.classList.remove('fa-regular');
+                heartIcon.classList.add('fa-solid');
+                heartIcon.style.color = 'red';
+            }
+        })
+        .catch(err => console.error(err));
+    });
 });

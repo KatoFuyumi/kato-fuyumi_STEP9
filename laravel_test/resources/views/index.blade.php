@@ -37,7 +37,7 @@
         </thead>
         <tbody>
             @forelse($products as $product)
-            <tr>
+            <tr class="align-middle">
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->product_name }}</td>
                 <td>{{ $product->description }}</td>

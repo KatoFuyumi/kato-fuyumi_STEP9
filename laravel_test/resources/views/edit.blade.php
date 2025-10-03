@@ -26,21 +26,21 @@
         </div>
 
         <div class="form-group">
+            <label for='price'>価格</label>
+            <input type="text" id="price" name="price" class="form-control" value="{{ old('price',$product->price) }}">
+        </div>
+
+        <div class="form-group">
             <label for='description'>商品説明</label>
             <textarea id="description" name="description" class="form-control" rows="5">{{ old('description',$product->description) }}</textarea>
         </div>
 
         <div class="form-group">
-            <label for='price'>金額</label>
-            <input type="text" id="price" name="price" class="form-control" value="{{ old('price',$product->price) }}">
-        </div>
-
-        <div class="form-group">
-            <label for="stock">在庫数:</label>
+            <label for="stock">在庫数</label>
             <input type="number" id="stock" name="stock" id="stock" class="form-control" value="{{ old('stock',$product->stock) }}">
         </div>
 
-        <div class="d-flex flex-wrap align-items-center gap-5">
+        <div class="d-flex flex-wrap align-items-center gap-5 mt-3">
             @if($product->img_path)
             <div class="form-group d-flex flex-wrap align-items-center">
                 <label>商品画像</label>
@@ -52,12 +52,12 @@
 
             <div class="form-group">
                 <label for="img_path"></label>
-                <input type="file" id="img_path" name="img_path" class="form-control-file">
+                <input type="file" id="img_path" name="img_path" class="form-control-file mb-3">
             </div>
         </div>
 
         <a href="{{ route('mypage.detail',$product->id) }}" class="btn btn-secondary">戻る</a>
-        <button type="submit" class="btn btn-primary">更新する</button>
+        <button type="submit" class="btn btn-primary">更新</button>
         
     </form>
 </div>

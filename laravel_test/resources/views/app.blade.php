@@ -25,7 +25,7 @@
             <a href="{{ route('index') }}" class="text-decoration-none">Home</a>
             <a href="{{ route('mypage') }}" class="text-decoration-none">マイページ</a>
 
-            <div>ログインユーザー: {{ auth()->user()->name ?? '未ログイン'}}</div>
+            <div>ログインユーザー: {{ auth()->user()->name}}</div>
 
             <div>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -43,6 +43,12 @@
         @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
         @endif
 

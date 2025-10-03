@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\RegisterRequest;
+
 
 class RegisterController extends Controller
 {
@@ -49,11 +51,6 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'name_kanji' => ['required', 'string', 'max:255'],
-            'name_kana' => ['nullable', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
@@ -63,14 +60,24 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+   public function register(RegisterRequest $request)
     {
-        return User::create([
+        // バリデーション済みデータを取得
+        $data = $request->validated();
+
+        // ユーザー作成
+        $user = User::create([
             'name' => $data['name'],
             'name_kanji' => $data['name_kanji'],
             'name_kana' => $data['name_kana'] ?? null,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // ログイン
+        $this->guard()->login($user);
+
+        // リダイレクト
+        return redirect($this->redirectPath());
     }
 }

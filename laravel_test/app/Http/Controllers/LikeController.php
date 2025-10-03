@@ -23,7 +23,7 @@ class LikeController extends Controller
         }
         //いいねの数
         return response()->json([
-            'likes_count' => $product->likes()->count(),
+
         ]);
     }
 
@@ -39,7 +39,6 @@ class LikeController extends Controller
         }
 
         return response()->json([
-            'likes_count' => $product->likes()->count(),
         ]);
     }
 }

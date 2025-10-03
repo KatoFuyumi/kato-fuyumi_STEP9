@@ -8,6 +8,10 @@ use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Ui\Presets\React;
+use App\Models\Company;
+use App\Models\Sale;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -33,8 +37,10 @@ class ProductController extends Controller
         $products = $this->product->getOwnProduct($user_id);
         //ビューにデータを渡す
         $user = Auth::user();
-        
-        return view('mypage',compact('products','user'));
+
+        //購入品一覧
+        $sales = $user->sales()->with('product')->get();
+        return view('mypage', compact('products','user','sales'));
     }
 
     //商品新規登録
@@ -47,13 +53,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         //バリデーション
-        $validatedData = $request->validate([
-            'product_name' => 'required|max:255',
-            'description' => 'required', 
-            'img_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required', 
-            'stock' => 'required', 
-        ]);
+        $validatedData = $request->validate();
 
         //画像ファイル処理
         if ($request->hasFile('img_path')){
@@ -68,14 +68,16 @@ class ProductController extends Controller
         //データの保存
         $product = Product::create($validatedData);
 
-        return redirect()->route('detail', $product->id)->with('success','商品が登録されました');
+        return redirect()->route('mypage')->with('success','商品が登録されました');
     }
 
-    //商品詳細画面
+    //商品詳細画面、会社名表示
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('detail',compact('product'));
+        $company = Company::findOrFail($product->company_id);
+
+        return view('detail', compact('product', 'company'));
     }
 
     //商品編集画面
@@ -86,21 +88,11 @@ class ProductController extends Controller
     }
 
     //編集処理
-    public function update(Request $request,$id)
+    public function update(ProductRequest $request,$id)
     {
-        $request->validate([
-            'product_name' => 'required|max:255',
-            'description' => 'required', 
-            'img_path' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'price' => 'required', 
-            'stock' => 'required', 
-        ]);
-
         $product = Product::findOrFail($id);
-        $product->product_name = $request->input('product_name');
-        $product->description = $request->input('description');
-        $product->price = $request->input('price');
-        $product->stock = $request->input('stock');
+
+        $data = $request->validated();
 
     //画像をアップロード
     if($request->hasFile('img_path')) {
@@ -113,11 +105,13 @@ class ProductController extends Controller
     }
 
     $product->save();
+    $product->fill($data);
 
     return redirect()->route('mypage.detail',$product->id)
         ->with('success','商品が更新されました');
     }
 
+    //検索
     public function search(Request $request)
     {
         $query = Product::query();
@@ -148,7 +142,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('index')
+        return redirect()->route('mypage')
             ->with('success','商品が削除されました');
     }
 
@@ -160,24 +154,79 @@ class ProductController extends Controller
     }
 
     //商品購入画面
-    public function showPurchaseForm($id)
+    public function showPurchaseForm($product_id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('company')->findOrFail($product_id);
         return view('purchase',compact('product'));
     }
 
     //購入処理
-    public function parchase(Request $request,$id)
+    public function purchaseWeb(Request $request)
     {
-        $product = Product::findOrFail($id);
-        $request->validate([
-            'quantity' => 'required|integer|min:1|max:'. $product->stock,
-        ]);
+      
+        $product_id = $request->input('product_id');
+        $quantity = $request->input('quantity');
 
-        $product->stock -=$request->quantity;
-        $product->save();
+        $product = Product::find($product_id);
 
-        return redirect()->route('mypage')
-            ->with('success', '商品を購入しました');
+        if (!$product) {
+            return redirect()->back()->with(['error'=>'商品が見つかりません']);
+        }
+        
+        if($product->stock < $quantity) {
+            return redirect()->back()->with(['error'=>'在庫が不足しています。']);
+        }
+
+        DB::beginTransaction();
+        try {
+            $sale = Sale::create([
+                'user_id' => Auth::id(),
+                'product_id' => $product_id,
+                'quantity' => $quantity
+            ]);
+
+        $product->decrement('stock',$quantity);
+        DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with(['error'=>'購入に失敗しました。']);
+        }
+
+        return redirect()->route('index')->with(['success' => '購入が完了しました！']);
     }
+
+    public function purchaseApi(Request $request)
+    {
+      
+        $product_id = $request->input('product_id');
+        $quantity = $request->input('quantity');
+
+        $product = Product::find($product_id);
+
+        if (!$product) {
+            return response()->json(['error'=>'商品が見つかりません'], 404);
+        }
+        
+        if($product->stock < $quantity) {
+            return response()->json(['error'=>'在庫が不足しています。'],400);
+        }
+
+        DB::beginTransaction();
+        try {
+            $sale = Sale::create([
+                'user_id' => Auth::id(),
+                'product_id' => $product_id,
+                'quantity' => $quantity
+            ]);
+
+        $product->decrement('stock',$quantity);
+        DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error'=>'購入に失敗しました。'],500);
+        }
+
+        return response()->json(['message' => '購入が完了しました！','order'   => $sale,], 201);
+    }
+  
 }

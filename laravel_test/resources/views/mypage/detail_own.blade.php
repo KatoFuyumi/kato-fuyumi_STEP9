@@ -12,11 +12,22 @@
         <h1>出品商品詳細</h1>
     </div>
 
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
+
     <div class="container">
         <p>商品名：{{ $product->product_name }}</p>
         <p>説明：{{ $product->description}}</p>
 
-        <div class="d-flex flex-wrap align-items-center gap-5">
+        <div class="d-flex align-items-center gap-5">
             @if($product->img_path)
             <p>画像：</p>
             <img src="{{ asset('storage/' . $product->img_path) }}" alt="{{ $product->product_name }}" class="img-fluid">

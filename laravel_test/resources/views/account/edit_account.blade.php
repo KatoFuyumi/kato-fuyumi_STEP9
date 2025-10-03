@@ -36,11 +36,11 @@
 
         <div>
             <label for="name_kana">カナ</label>
-            <input type="text" id="name_kana" name="name_kana" class="form-control" value="{{ old('name_kana',$user->name_kana) }}">
+            <input type="text" id="name_kana" name="name_kana" class="form-control mb-3" value="{{ old('name_kana',$user->name_kana) }}">
         </div>
 
         <a href="{{ route('mypage') }}" class="btn btn-secondary">戻る</a>
-        <button type="submit" class="btn btn-primary">更新する</button>
+        <button type="submit" class="btn btn-primary">更新</button>
     </form>
 
 </div>
