@@ -26,6 +26,7 @@ class Product extends Model
         $products = $this->where('user_id','!=',$user_id)
             ->with('user')
             ->get();
+            
         return $products;
     }
 
