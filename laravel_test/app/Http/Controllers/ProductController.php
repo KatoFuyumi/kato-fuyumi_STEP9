@@ -18,7 +18,9 @@ class ProductController extends Controller
     //一覧画面
     public function index()
     {
-        $products = Product::all();
+        $user_id = Auth::id();
+
+        $products = $this->product->getOtherProduct($user_id);
 
         return view('index',compact('products'));
     }
@@ -33,8 +35,10 @@ class ProductController extends Controller
     {
         //ログインユーザーID取得
         $user_id = Auth::id();
+
         //自身の商品取得
         $products = $this->product->getOwnProduct($user_id);
+        
         //ビューにデータを渡す
         $user = Auth::user();
 
@@ -53,7 +57,7 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         //バリデーション
-        $validatedData = $request->validate();
+        $validatedData = $request->validated();
 
         //画像ファイル処理
         if ($request->hasFile('img_path')){
@@ -104,8 +108,8 @@ class ProductController extends Controller
         $product->img_path = $imagePath;
     }
 
-    $product->save();
     $product->fill($data);
+    $product->save();
 
     return redirect()->route('mypage.detail',$product->id)
         ->with('success','商品が更新されました');
